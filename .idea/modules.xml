@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../TribalWars/GameSources/.idea/GameSources.iml" filepath="$PROJECT_DIR$/../TribalWars/GameSources/.idea/GameSources.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Events/.idea/TribalWars.iml" filepath="$PROJECT_DIR$/../Events/.idea/TribalWars.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Tribalwars-Scripts.iml" filepath="$PROJECT_DIR$/.idea/Tribalwars-Scripts.iml" />
     </modules>
   </component>
