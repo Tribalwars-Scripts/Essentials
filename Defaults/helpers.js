@@ -1,4 +1,4 @@
-const DEF_DELAY = DEF_DELAY || 1000;
+let DEF_DELAY = 1000;
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms || DEF_DELAY));
 }
