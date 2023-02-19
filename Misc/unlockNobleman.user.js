@@ -37,44 +37,39 @@ const Changelog = {
 /***************************** Configuration *****************************/
 
 
-let userInputParent =  document.getElementById('additional_snob_form');
+(async function(){
+	let userInputParent =  document.getElementById('additional_snob_form');
 
-// create form element
-function getActionValue() {
-	//return TribalWars.post('snob', {'action': 'buynobleman'},'', TribalWars.get('snob', {mode: 'train'}));
-}
-
-const form = document.createElement("div");
-form.id = "additional_snob_form_force";
+	const form = document.createElement("div");
+	form.id = "additional_snob_form_force";
 
 // create button element and set its properties
-const button = document.createElement("button");
-button.type = "submit";
-button.id = "additional_snob_button_skip";
-button.classList.add("btn");
+	const button = document.createElement("button");
+	button.type = "submit";
+	button.id = "additional_snob_button_skip";
+	button.classList.add("btn");
 
 // create span element and set its properties and text content
-const span = document.createElement("span");
-span.classList.add("coinbag", "before");
-span.textContent = "Desbloqueia-me nobres imediatamente";
+	const span = document.createElement("span");
+	span.classList.add("coinbag", "before");
+	span.textContent = "Desbloqueia-me nobres imediatamente";
 
 // append span element to button element
-button.appendChild(span);
+	button.appendChild(span);
 
 // append button and input elements to form element
-form.appendChild(button);
+	form.appendChild(button);
 
-document.getElementById('additional_snob_button_skip').action
+	userInputParent.parentNode.insertBefore(form,userInputParent);
+	document.getElementById('additional_snob_form').remove();
 
-userInputParent.parentNode.insertBefore(form,userInputParent);
-document.getElementById('additional_snob_form').remove();
-
-document
-	.getElementById('additional_snob_button_skip')
-	.addEventListener('click', function () {
-		TribalWars.post('snob', {'action': 'buynobleman'},'', TribalWars.get('snob', {mode: 'train'}));
-		UI.SuccessMessage("Vamooos 1 Nobre desbloqueado.", 1000);
-	})
+	document
+		.getElementById('additional_snob_button_skip')
+		.addEventListener('click', function () {
+			TribalWars.post('snob', {'action': 'buynobleman'},'', TribalWars.get('snob', {mode: 'train'}));
+			UI.SuccessMessage("Vamooos 1 Nobre desbloqueado.", 1000);
+		});
+})()
 
 // if (reset){
 // 	localStorage.removeItem('buynobleman')
