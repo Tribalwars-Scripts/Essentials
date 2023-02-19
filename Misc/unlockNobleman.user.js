@@ -7,7 +7,7 @@
 // @description 	    Script to automatically unlock Noblemans
 // @author		        Bruno Preto (bonobobo#1694)
 // @include             https://**.tribalwars.**/game.php?**&screen=snob**
-// @version     	    1.0.0
+// @version     	    1.0.1
 // @copyright           2023, brunommpreto (https://openuserjs.org/)
 // @license             AGPL-3.0-or-later
 // @supportURL          https://github.com/Tribalwars-Scripts/
@@ -66,8 +66,8 @@ const Changelog = {
 	document
 		.getElementById('additional_snob_button_skip')
 		.addEventListener('click', function () {
-			TribalWars.post('snob', {'action': 'buynobleman'},'', TribalWars.get('snob', {mode: 'train'}));
 			UI.SuccessMessage("Vamooos 1 Nobre desbloqueado.", 1000);
+			TribalWars.post('snob', {'action': 'buynobleman'},'', TribalWars.redirect('snob', {mode: 'train'}));
 		});
 })()
 
