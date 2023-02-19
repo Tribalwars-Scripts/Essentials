@@ -1,9 +1,17 @@
 (() => {
 	const configKey='flagUpgraderConfig';
+	localStorage.removeItem(configKey);
 	const config=JSON.parse(localStorage.getItem(configKey)) || {
 		upgradeAmounts: {amount: 0},
-		checkedFlags: []
+		checkedFlags: [],
+		size: 9,
+		reqUpgrade: Math.sqrt(9),
 	};
+	const sF={
+		value: 'value',
+		go: 'Upgrade',
+		stop: 'Stop'
+	}
 	const flagConfig={
 		1: {color: '#777676'},
 		2: {color: '#663d00'},
@@ -19,10 +27,29 @@
 	let flagsToBeUpgraded=config.checkedFlags;
 	let locked=false;
 
+	/**
+	 * Performs the mapping and slicing of the Flags
+	 *
+	 * @param  {Number} flag
+	 * @return {Array} Returns the available flag upgrades for
+	 *                 all flags or a specific flag
+	 */
+	const UpgradableArray=(flag) =>
+		(Array.from(document.querySelectorAll('#flags_container > div'))
+			.map(e => {
+				return Math.floor(parseInt(e.children[1].textContent || 0) / config.reqUpgrade)
+			})).slice(config.size * (flag ? flag - 1 :0), config.size * (flag || Object.keys(flagConfig).length))
+
+	const SaveToCache = (value) => {
+		localStorage.setItem(configKey, JSON.stringify(value || config))
+		console.info("test")
+	}
+
+
 	const reset=() => {
 		flagLevelToBeUpgraded=undefined;
 		flagsToBeUpgraded=[];
-		$('.flagUpgrader_upgrade').value('Upgrade');
+		$('.flagUpgrader_upgrade').setAttribute(sF.value, sF.go)
 		locked=false;
 	}
 
@@ -35,9 +62,6 @@
 			$(`#flag_box_${flagLevel}_1`).before(`<div style="float:left; margin-top: 21px">
                              <input class="flagUpgrader_checkbox" 
                                data-flag="flagLevel" 
-                               style="transform: scale(1.3); 
-                               margin-right: 0; 
-                               margin-left: 0"
                                type="checkbox"${flagLevel}>
                                </div>`);
 			$('#flagUpgraderButtons').append(`<input type="button" 
@@ -47,10 +71,13 @@
 								value="Upgrade"/>`);
 			$('#flagUpgraderInputs').append(`<input 
 								style="width:54px; margin-right: 5px; ${flagLevel === 1 ? 'margin-left: 18px' :''}" 
-								type="text" 
+								type="number" 
 								class="flagUpgrader_input" 
 								data-level="${flagLevel}" 
 								value="${config.upgradeAmounts[flagLevel].amount || 0}"/>`);
+			$('#flagUpgraderDropDown').append(`<select style="width:54px; margin-right: 5px; ${flagLevel === 1 ? 'margin-left: 18px' :''}" class="flagUpgrader_dropdown" data-level="${flagLevel}">
+<option value="${config.upgradeAmounts[flagLevel].amount || 0}">"${config.upgradeAmounts[flagLevel].amount || 0}"</option>
+</select>`);
 			$(`.flagUpgrader_checkbox[data-flag="${flagLevel}"]`).prop('checked', config.checkedFlags.includes(flagLevel));
 		});
 
@@ -58,9 +85,27 @@
 		const flag=$(this).data('flag');
 		if (this.checked) {
 			config.checkedFlags.push(flag);
+			// $(`#flag_box_${flag}_${1}`).find('.flag_count:visible').map((_, el) => {
+			// 	$(el).data('level');
+			// 	console.log(el)
+			// 	console.log($(el))
+			// });
+			// Render the dropdown
+
+			//Renders the Array of possible upgradres of a specific flag
+			Array.from(document.querySelectorAll('#flags_container > div')).slice(config.size * (flag - 1), config.size * flag).map(e => {
+				return parseInt(e.children[1].textContent || 0)
+			})
+
+			for (let i=1; i < parseInt($(`#flag_box_${flag}_${1}`).find('.flag_count:visible').text()); i++) {
+				let option=options[i];
+				$('.flagUpgrader_dropdown').options.add(new Option(option.text, option.value, option.selected));
+			}
 		}
 		else {
 			config.checkedFlags=config.checkedFlags.filter(item => item !== flag)
+			$('.flagUpgrader_dropdown').blur();
+			$(".flagUpgrader_dropdown option").remove();
 		}
 
 		localStorage.setItem(configKey, JSON.stringify(config));
@@ -69,13 +114,16 @@
 
 	$('.flagUpgrader_upgrade').click(function () {
 		const value=$(this).val();
-		$('.flagUpgrader_upgrade').value('Upgrade');
+		$('.flagUpgrader_upgrade').setAttribute(sF.value, sF.go);
 		if (value === 'Stop') {
 			reset();
 		}
 		else {
 			flagLevelToBeUpgraded=$(this).data('level');
-			flagsToBeUpgraded=$(`.flagUpgrader_checkbox:checked`).map((_, el) => $(el).data('flag')).get();
+			flagsToBeUpgraded=$(`.flagUpgrader_checkbox:checked`).map(
+				(_, el) => {
+					$(el).data('flag')
+				}).get();
 			$(this).value('Stop');
 		}
 		$(this).blur();
