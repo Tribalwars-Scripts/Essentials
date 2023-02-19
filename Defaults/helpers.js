@@ -1,6 +1,4 @@
-import { config } from 'https://rawcdn.githack.com/Tribalwars-Scripts/Essentials/91d921398078f35867247a44d896e1b2ce6ef525/Defaults/config.js';
-
-const DEF_DELAY = config.DEF_DELAY || 1000;
+const DEF_DELAY = DEF_DELAY || 1000;
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms || DEF_DELAY));
 }
