@@ -5,5 +5,3 @@ function sleep(ms) {
 function getMilliseconds(hrs, min, sec) {
 	return ((hrs * 60 * 60 + min * 60 + sec) * 1000);
 }
-
-export { sleep, getMilliseconds };
